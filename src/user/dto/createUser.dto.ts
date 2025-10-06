@@ -3,12 +3,12 @@ import { Roles } from '../../../generated/prisma'
 
 export class CreateUserDto {
 	@IsString()
-	login: string
+	login!: string
 
 	@IsString()
 	@Min(6)
-	password: string
+	password!: string
 
 	@IsString()
-	role: Roles
+	role!: Roles
 }
