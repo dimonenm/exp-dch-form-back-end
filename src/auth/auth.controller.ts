@@ -12,6 +12,7 @@ export class AuthController {
 	async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
 		const user = await this.authService.createUser(createUserDto)
 		if (!user) {
+			console.log('user: ', user);
 			throw new ConflictException(
 				'Регистрация не удалась.'
 			)
