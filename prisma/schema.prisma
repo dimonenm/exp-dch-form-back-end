@@ -18,12 +18,18 @@ model User {
 
   login    String @unique
   passwordHash String
-  role     Roles  @default(USER)
+  role     Roles  @default(EXPERT_ON_DUTY)
 
   @@map("users")
 }
 
 enum Roles {
-  USER
   ADMIN
+  HEAD_OF_EXPERT_SERVICE
+  DEPUTY_HEAD_OF_EXPERT_SERVICE
+  CHIEF_OF_DUTY_DEPARTMENT
+  EXPERT_ON_DUTY
+  EXPERT_BIOLOGIST
+  EXPERT_BALLISTIC
+  EXPERT_FINGERPRINT
 }
