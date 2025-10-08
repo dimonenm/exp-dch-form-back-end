@@ -4,7 +4,6 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { validateOrReject } from 'class-validator';
 import { CreateUserDto } from './dto/createUser.dto';
 import { User } from 'generated/prisma';
 import { hash } from 'argon2';
