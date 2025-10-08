@@ -95,7 +95,7 @@ export class UserService {
     const isExist = await this.findById(id);
 
     if (!isExist) {
-      throw new NotFoundException('Пользователь с таким login не существует.');
+      throw new NotFoundException('Пользователь с таким id не существует.');
     } else {
       const user = await this.prisma.user.delete({
         where: { id },

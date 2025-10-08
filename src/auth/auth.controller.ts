@@ -1,7 +1,8 @@
-import { Body, ConflictException, NotFoundException, Controller, Get, HttpCode, HttpStatus, Post, Param } from '@nestjs/common'
+import { Body, ConflictException, NotFoundException, Controller, Get, HttpCode, HttpStatus, Post, Put, Delete, Query } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { CreateUserDto } from 'src/user/dto/createUser.dto'
 import { User } from 'generated/prisma'
+import { UpdateUserDto } from 'src/user/dto/updateUser.dto'
 
 @Controller('auth')
 export class AuthController {
@@ -39,8 +40,9 @@ export class AuthController {
 	}
 
 	@HttpCode(HttpStatus.OK)
-	@Get('getUserById')
-	async getUserById(@Param('id') id: string): Promise<User> {
+	@Get('get_user_by_id')
+	async getUserById(@Query('id') id: string): Promise<User> {
+		console.log('id: ', id)
 		const user = await this.authService.getUserById(id)
 
 		if (!user) {
@@ -53,8 +55,8 @@ export class AuthController {
 	}
 
 	@HttpCode(HttpStatus.OK)
-	@Get('getUserByLogin')
-	async getUserByLogin(@Param('login') login: string): Promise<User> {
+	@Get('get_user_by_login')
+	async getUserByLogin(@Query('login') login: string): Promise<User> {
 		const user = await this.authService.getUserByLogin(login)
 
 		if (!user) {
@@ -64,5 +66,30 @@ export class AuthController {
 		}
 
 		return user
+	}
+
+	@HttpCode(HttpStatus.OK)
+	@Put('update_user')
+	async updateUser(@Body() updateUserDto: UpdateUserDto): Promise<User> {
+		const user = await this.authService.updateUser(updateUserDto)
+		if (!user) {
+			throw new ConflictException(
+				'Обновление пользователя не удалось.'
+			)
+		}
+		return user
+	}
+
+	@HttpCode(HttpStatus.OK)
+	@Delete('delete_user')
+	async deleteUser(@Query('id') id: string): Promise<string> {
+		console.log('id: ', id);
+		const isDeleted = await this.authService.deleteUser(id)
+		if (!isDeleted) {
+			throw new ConflictException(
+				'Удаление пользователя не удалось.'
+			)
+		}
+		return isDeleted
 	}
 }
