@@ -83,7 +83,6 @@ export class AuthController {
 	@HttpCode(HttpStatus.OK)
 	@Delete('delete_user')
 	async deleteUser(@Query('id') id: string): Promise<string> {
-		console.log('id: ', id);
 		const isDeleted = await this.authService.deleteUser(id)
 		if (!isDeleted) {
 			throw new ConflictException(
