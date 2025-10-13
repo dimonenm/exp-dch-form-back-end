@@ -3,10 +3,17 @@ import { AuthService } from './auth.service'
 import { CreateUserDto } from 'src/user/dto/createUser.dto'
 import { User } from 'generated/prisma'
 import { UpdateUserDto } from 'src/user/dto/updateUser.dto'
+import { SignInDto } from './dto/signIn.dto'
 
 @Controller('auth')
 export class AuthController {
 	constructor(private authService: AuthService) { }
+
+	@HttpCode(HttpStatus.OK)
+	@Post('login')
+	signIn(@Body() signInDto: SignInDto) {
+		return this.authService.signIn(signInDto.login, signInDto.password)
+	}
 
 	@HttpCode(HttpStatus.OK)
 	@Post('create_user')
