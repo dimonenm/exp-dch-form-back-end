@@ -1,4 +1,5 @@
-import { Body, ConflictException, NotFoundException, Controller, Get, HttpCode, HttpStatus, Post, Put, Delete, Query } from '@nestjs/common'
+import { Body, ConflictException, NotFoundException, Controller, Get, HttpCode, HttpStatus, Post, Put, Delete, Query, UseGuards } from '@nestjs/common'
+import { AuthGuard } from './guards/auth.guard';
 import { AuthService } from './auth.service'
 import { CreateUserDto } from 'src/user/dto/createUser.dto'
 import { User } from 'generated/prisma'
@@ -27,6 +28,7 @@ export class AuthController {
 		return user
 	}
 
+	@UseGuards(AuthGuard)
 	@HttpCode(HttpStatus.OK)
 	@Get('get_all_users')
 	async getAllUsers(): Promise<User[]> {
