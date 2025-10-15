@@ -5,6 +5,7 @@ import { CreateUserDto } from 'src/user/dto/createUser.dto'
 import { User } from 'generated/prisma'
 import { UpdateUserDto } from 'src/user/dto/updateUser.dto'
 import { SignInDto } from './dto/signIn.dto'
+import { RoleGuard } from './guards/role.guard'
 
 @Controller('auth')
 export class AuthController {
@@ -28,6 +29,7 @@ export class AuthController {
 		return user
 	}
 
+	@UseGuards(RoleGuard)
 	@UseGuards(AuthGuard)
 	@HttpCode(HttpStatus.OK)
 	@Get('get_all_users')
