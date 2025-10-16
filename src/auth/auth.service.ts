@@ -1,5 +1,6 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common'
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
+import { verify } from 'argon2'
 import { User } from 'generated/prisma'
 import { CreateUserDto } from 'src/user/dto/createUser.dto'
 import { UpdateUserDto } from 'src/user/dto/updateUser.dto'
@@ -13,11 +14,16 @@ export class AuthService {
 
 		const user = await this.userService.findUserByLogin(login)
 
+		if (!user || !user.passwordHash) {
+			throw new NotFoundException("Пользователь не найден. Проверте введеные данные.")
+		}
 
-		// if (user?.passwordHash !== password) {
-		// 	throw new UnauthorizedException()
-		// }
-		
+		const isValidPassword = await verify(user.passwordHash, password)
+
+		if (!isValidPassword) {
+			throw new UnauthorizedException("Неверный пароль")
+		}
+
 		const payload = { id: user?.id, login: user?.login, role: user?.role }
 		return {
 			access_token: await this.jwtService.signAsync(payload),
