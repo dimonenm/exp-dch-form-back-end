@@ -5,29 +5,32 @@ import { User } from 'generated/prisma'
 import { CreateUserDto } from 'src/user/dto/createUser.dto'
 import { UpdateUserDto } from 'src/user/dto/updateUser.dto'
 import { UserService } from 'src/user/user.service'
+import { SignInDto } from './dto/signIn.dto'
+import { ConfigService } from '@nestjs/config'
 
 @Injectable()
 export class AuthService {
-	constructor(private userService: UserService, private jwtService: JwtService) { }
+	constructor(private userService: UserService, private jwtService: JwtService, private configService: ConfigService) { }
 
-	async signIn(login: string, password: string): Promise<{ access_token: string }> {
+	async signIn(req: Request, dto: SignInDto): Promise<void> {
 
-		const user = await this.userService.findUserByLogin(login)
+		const user = await this.userService.findUserByLogin(dto.login)
 
 		if (!user || !user.passwordHash) {
 			throw new NotFoundException("Пользователь не найден. Проверте введеные данные.")
 		}
 
-		const isValidPassword = await verify(user.passwordHash, password)
+		const isValidPassword = await verify(user.passwordHash, dto.password)
 
 		if (!isValidPassword) {
 			throw new UnauthorizedException("Неверный пароль")
 		}
 
 		const payload = { id: user?.id, login: user?.login, role: user?.role }
-		return {
-			access_token: await this.jwtService.signAsync(payload),
-		}
+		const access_token = await this.jwtService.signAsync(payload)
+
+
+		return
 	}
 
 	createUser(createUserDto: CreateUserDto): Promise<User | null> {

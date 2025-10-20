@@ -1,10 +1,14 @@
-import { IsString, Min } from 'class-validator'
+import { IsNotEmpty, IsString, MinLength } from 'class-validator'
 
 export class SignInDto {
-	@IsString()
+	@IsString({ message: 'Email должен быть строкой.' })
+	@IsNotEmpty({ message: 'Email обязателен для заполнения.' })
 	login!: string
 
-	@IsString()
-	@Min(6)
+	@IsString({ message: 'Пароль должен быть строкой.' })
+	@IsNotEmpty({ message: 'Пароль обязателен для заполнения.' })
+	@MinLength(5, {
+		message: 'Пароль должен содержать минимум 5 символов.'
+	})
 	password!: string
 }
