@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
-import { UserModule } from 'src/user/user.module';
-import { getJwtConfig } from '../config/jwt.config';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
+import { Module } from '@nestjs/common'
+import { JwtModule } from '@nestjs/jwt'
+import { UserModule } from 'src/user/user.module'
+import { getJwtConfig } from '../config/jwt.config'
+import { AuthController } from './auth.controller'
+import { AuthService } from './auth.service'
+import { ConfigModule, ConfigService } from '@nestjs/config'
 
 @Module({
   imports: [
@@ -15,10 +16,12 @@ import { AuthService } from './auth.service';
     // }),
     JwtModule.registerAsync({
       global: true,
+      imports: [ConfigModule],
+      inject: [ConfigService],
       useFactory: getJwtConfig,
-    }),
+    })
   ],
   providers: [AuthService],
   controllers: [AuthController],
 })
-export class AuthModule {}
+export class AuthModule { }

@@ -1,4 +1,5 @@
-import { Body, ConflictException, NotFoundException, Controller, Get, HttpCode, HttpStatus, Post, Put, Delete, Query, UseGuards } from '@nestjs/common'
+import { Body, ConflictException, NotFoundException, Controller, Get, HttpCode, HttpStatus, Post, Put, Delete, Query, UseGuards, Res } from '@nestjs/common'
+import { Request, Response } from 'express'
 import { AuthGuard } from './guards/auth.guard';
 import { AuthService } from './auth.service'
 import { CreateUserDto } from 'src/user/dto/createUser.dto'
@@ -13,8 +14,14 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() signInDto: SignInDto) {
-    return this.authService.signIn(signInDto.login, signInDto.password);
+  signIn(@Body() signInDto: SignInDto, @Res({ passthrough: true }) res: Response) {
+    return this.authService.signIn(res, signInDto);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('logout')
+  logout(@Res({ passthrough: true }) res: Response) {
+    return this.authService.logout(res)
   }
 
   @HttpCode(HttpStatus.OK)

@@ -7,9 +7,9 @@ export const jwtConstants = {
 };
 
 export const getJwtConfig = (configService: ConfigService) => {
-  const jwtModuleOptions: JwtModuleOptions = {
+  const jwtModuleOptions: JwtModuleOptions = ({
     secret: configService.getOrThrow('JWT_SECRET'),
     signOptions: { expiresIn: '120s' },
-  };
+  });
   return jwtModuleOptions;
 };
