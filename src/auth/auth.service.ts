@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { verify } from 'argon2'
-import {  Response } from 'express'
+import { Response } from 'express'
 import { User } from 'generated/prisma'
 import { CreateUserDto } from 'src/user/dto/createUser.dto'
 import { UpdateUserDto } from 'src/user/dto/updateUser.dto'
