@@ -22,21 +22,21 @@ export class AuthGuard implements CanActivate {
     }
     try {
       const payload = await this.jwtService.verifyAsync(token)
-
-
-      console.log(`Elapsed time: ${(Number(new Date(payload.exp)) - (Number(new Date()) / 1000)).toFixed(0)} seconds`)
-
+      request['user'] = payload
 
       // const payload = await this.jwtService.verifyAsync(token, {
       //   secret: jwtConstants.secret,
       // });
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
-      request['user'] = payload
+
     } catch {
-      console.log('catch')
       const isExpire = await this.jwtService.decode(token)
-      console.log(`Elapsed time: ${(Number(new Date(isExpire.exp)) - (Number(new Date()) / 1000)).toFixed(0)} seconds`)
+      const isElapsedTime = (Number(new Date(isExpire.exp)) - (Number(new Date()) / 1000))
+      if (isElapsedTime <= 0) {
+        throw new UnauthorizedException({ errorMessage: 'Время жизни accessToken истекло' })
+      }
+
       throw new UnauthorizedException()
     }
     return true
