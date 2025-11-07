@@ -33,29 +33,18 @@ export class AuthService {
 		const payload = { id: user?.id, login: user?.login, role: user?.role }
 		const access_token = await this.jwtService.signAsync(payload)
 
-		const expiresIn = new Date()
-		expiresIn.setDate(expiresIn.getDate() + this.EXPIRE_DAY_REFRESH_TOKEN)
-
-		res.cookie(this.ACCESS_TOKEN_NAME, access_token, {
-			httpOnly: true,
-			domain: 'localhost',
-			expires: expiresIn,
-			secure: true,
-			sameSite: 'none'
-		})
-
 		return access_token
 	}
 
 	logout(res: Response): string {
 
-		res.cookie(this.ACCESS_TOKEN_NAME, '', {
-			httpOnly: true,
-			domain: 'localhost',
-			expires: new Date(0),
-			secure: true,
-			sameSite: 'none'
-		})
+		// res.cookie(this.ACCESS_TOKEN_NAME, '', {
+		// 	httpOnly: true,
+		// 	domain: 'localhost',
+		// 	expires: new Date(0),
+		// 	secure: true,
+		// 	sameSite: 'none'
+		// })
 
 		return 'Осуществлен выход'
 	}
